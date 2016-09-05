@@ -4,12 +4,17 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
     public int SegmentsOfLevel = 1;
-    public Transform CorridorPrefab;    //Префаб коридора
+    public Transform CorridorPrefab;    // Префаб коридора
     public Transform DoorPrefab;        // Префаб двери
+    public GameObject Player;           // Префаб игрока
 
-    private void Start()
+    //private GameObject _mainCamera;
+
+    private void Awake()
     {
+        //_mainCamera = GameObject.FindWithTag("MainCamera");
         _GenerateLevel();
+        Instantiate(Player);
     }
 
     /// <summary>
@@ -18,6 +23,7 @@ public class GameController : MonoBehaviour
     private void _GenerateLevel()
     {
         GameObject levelContainer = new GameObject("Level");
+        levelContainer.AddComponent<LevelData>();
         Transform prevSegment = null;
 
         for (int i = 0; i < SegmentsOfLevel; i++)
@@ -30,7 +36,14 @@ public class GameController : MonoBehaviour
                 float offsetX = prevSegment.position.x - prevSegment.GetComponent<CorridorScript>().LeftPoint.position.x;
                 Vector3 offset = new Vector3(offsetX, 0);
                 currentSegment.transform.position = prevSegment.GetComponent<CorridorScript>().RightPoint.position + offset;
+
             }
+            else
+            {
+                //Устанавливаем левый край сцены
+                LevelData.LeftLimiter = currentSegment.GetComponent<CorridorScript>().LeftPoint;
+            }
+
 
             if (i == 0)
                 _InstDoor("StartDoor", levelContainer, currentSegment.GetComponent<CorridorScript>().LeftPoint);
@@ -39,6 +52,9 @@ public class GameController : MonoBehaviour
 
             prevSegment = currentSegment;
         }
+
+        //Устанавливаем правый край сцены
+        LevelData.RightLimiter = prevSegment.GetComponent<CorridorScript>().RightPoint;
     }
 
     /// <summary>
