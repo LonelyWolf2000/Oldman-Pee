@@ -1,0 +1,1 @@
+﻿using UnityEngine;using System.Collections;public class DoorScript : MonoBehaviour{    private void OnTriggerEnter2D(Collider2D other)    {        if (gameObject.name == "EndDoor" && other.tag == "Player")        {            Debug.Log("Win!!!!!!!");        }    }}
