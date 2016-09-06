@@ -218,10 +218,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SegmentsOfLevel: 2
+  AmountEnemies: 5
+  SafeRadius: 6.5
   CorridorPrefab: {fileID: 4000010056473748, guid: bb9d10154290fe147b27a052216dcf9b,
     type: 2}
   DoorPrefab: {fileID: 4000012818354744, guid: 06919a53f4bc1af438be18d959039b64, type: 2}
   Player: {fileID: 1000012243581742, guid: 641079b6d51f2c641aa8c639891f5f9c, type: 2}
+  Enemies: []
 --- !u!4 &1415993515
 Transform:
   m_ObjectHideFlags: 0

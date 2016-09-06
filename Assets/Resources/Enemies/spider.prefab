@@ -9,33 +9,32 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000012243581742}
+  m_RootGameObject: {fileID: 1000010765156728}
   m_IsPrefabParent: 1
---- !u!1 &1000012243581742
+--- !u!1 &1000010765156728
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000012764804862}
-  - 212: {fileID: 212000010400892780}
-  - 114: {fileID: 114000011732783080}
-  - 50: {fileID: 50000012192233754}
-  - 58: {fileID: 58000013524660028}
+  - 4: {fileID: 4000011874228430}
+  - 212: {fileID: 212000012766415740}
+  - 58: {fileID: 58000013011387036}
+  - 114: {fileID: 114000011529528196}
   m_Layer: 0
-  m_Name: Oldman
-  m_TagString: Player
+  m_Name: spider
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000012764804862
+--- !u!4 &4000011874228430
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012243581742}
+  m_GameObject: {fileID: 1000010765156728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -43,55 +42,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!50 &50000012192233754
-Rigidbody2D:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012243581742}
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!58 &58000013524660028
+--- !u!58 &58000013011387036
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012243581742}
+  m_GameObject: {fileID: 1000010765156728}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0.23, y: 0.4915254}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5481247
---- !u!114 &114000011732783080
+  m_Radius: 0.25
+--- !u!114 &114000011529528196
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012243581742}
+  m_GameObject: {fileID: 1000010765156728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72124153896b6164dab8d3fdb402cf67, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ff691a05e5adc24da3af060aeb9b209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 1
---- !u!212 &212000010400892780
+--- !u!212 &212000012766415740
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012243581742}
+  m_GameObject: {fileID: 1000010765156728}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -115,7 +96,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4337d7dc764b6bb488dedfb2ef94b75d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 55b3feafa3e42284da0180465347a30f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

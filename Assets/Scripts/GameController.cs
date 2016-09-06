@@ -3,17 +3,23 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
-    public int SegmentsOfLevel = 1;
+    public int SegmentsOfLevel = 1;     // Количество сегментов (экранов) левела
+    public int AmountEnemies = 2;       // Количество врагов на левеле
+    public float SafeRadius = 6.5f;     // Минимальное удаление от точки старта плеера для спауна противника
     public Transform CorridorPrefab;    // Префаб коридора
     public Transform DoorPrefab;        // Префаб двери
     public GameObject Player;           // Префаб игрока
+    public GameObject[] Enemies;
 
-    //private GameObject _mainCamera;
+    private const float _MININTERVAL = 0.5f; // Минимальный интервал между спунищимися противниками
 
     private void Awake()
     {
-        //_mainCamera = GameObject.FindWithTag("MainCamera");
+        if(Enemies.Length == 0)
+            Enemies = Resources.LoadAll<GameObject>("Enemies");
+
         _GenerateLevel();
+        _SpawnEnemies();
         Instantiate(Player);
     }
 
@@ -44,17 +50,15 @@ public class GameController : MonoBehaviour
                 LevelData.LeftLimiter = currentSegment.GetComponent<CorridorScript>().LeftPoint;
             }
 
-
-            if (i == 0)
-                _InstDoor("StartDoor", levelContainer, currentSegment.GetComponent<CorridorScript>().LeftPoint);
-            if (i == SegmentsOfLevel -1)
-                _InstDoor("EndDoor", levelContainer, currentSegment.GetComponent<CorridorScript>().RightPoint);
-
             prevSegment = currentSegment;
         }
 
         //Устанавливаем правый край сцены
         LevelData.RightLimiter = prevSegment.GetComponent<CorridorScript>().RightPoint;
+        LevelData.HightLevel = prevSegment.FindChild("ceiling").position.y;
+
+        _InstDoor("StartDoor", levelContainer, LevelData.LeftLimiter);
+        _InstDoor("EndDoor", levelContainer, LevelData.RightLimiter);
     }
 
     /// <summary>
@@ -63,14 +67,56 @@ public class GameController : MonoBehaviour
     /// <param name="name"></param>
     /// <param name="levelContainer"></param>
     /// <param name="currentSegment"></param>
-    private void _InstDoor(string name, GameObject levelContainer, Transform currentSegment)
+    private void _InstDoor(string name, GameObject levelContainer, Transform doorPosition)
     {
         Transform door = Instantiate(DoorPrefab);
         door.name = name;
         door.parent = levelContainer.transform;
-        door.transform.position = currentSegment.transform.position;
+        door.transform.position = doorPosition.transform.position;
+    }
 
-        if (name == "EndDoor")
-            door.transform.rotation = new Quaternion(0, 180, 0, 0);
+    /// <summary>
+    /// Спауним количество AmountEnemies противников, рандомного типа в рандомной точке.
+    /// </summary>
+    private void _SpawnEnemies()
+    {
+        if(AmountEnemies == 0 || Enemies == null || Enemies.Length == 0) return;
+
+        GameObject containerEnemy = new GameObject("Enemies");
+        float[] spawnedEnemies = new float[AmountEnemies];
+
+        for (int i = 0; i < AmountEnemies; i++)
+        {
+            GameObject enemy = Instantiate(Enemies[Random.Range(0, Enemies.Length)]);
+            enemy.transform.position = _GenerateUnicCoord(spawnedEnemies, i);
+            enemy.transform.parent = containerEnemy.transform;
+        }
+    }
+
+    /// <summary>
+    /// Генерируем уникальную координату Х удаленную на не ближе, чем _MININTERVAL от ближайшего объекта.
+    /// </summary>
+    /// <param name="spawnedEnemies"></param>
+    /// <param name="currentIndex"></param>
+    /// <returns></returns>
+    private Vector3 _GenerateUnicCoord(float[] spawnedEnemies, int currentIndex)
+    {
+        float x = -1;
+        while (x < 0)
+        {
+            x = Random.Range(LevelData.LeftLimiter.position.x + SafeRadius, LevelData.RightLimiter.position.x);
+            foreach (var variable in spawnedEnemies)
+            {
+                if (Mathf.Abs(variable - x) < _MININTERVAL)
+                {
+                    x = -1;
+                    break;
+                }
+            }
+        }
+
+        spawnedEnemies[currentIndex] = x;
+
+        return new Vector3(x, 0);
     }
 }

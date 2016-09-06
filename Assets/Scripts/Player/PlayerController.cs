@@ -12,19 +12,16 @@ namespace Player
         public int Stress { get; private set; }
         public float MoveSpeed;
 
-        private const int _DIVIDER = 10;
+        private const int _DIVIDER = 100;
         private float _speed;
         private float _leftOffset;
         private float _rightOffset;
-
-
 
         private void Start()
         {
             if (Player == null)
                 Player = this;
 
-            _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.1f;
             _rightOffset = 1 - GetComponent<SpriteRenderer>().sprite.pivot.x / 100;
         }
@@ -37,6 +34,7 @@ namespace Player
         public void Move(float direction)
         {
             Vector3 newPosition = new Vector3(transform.position.x + _speed * direction, transform.position.y, transform.position.z);
+            _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
 
             if (newPosition.x > LevelData.LeftLimiter.position.x + _leftOffset
                 && newPosition.x < LevelData.RightLimiter.position.x - _rightOffset)
