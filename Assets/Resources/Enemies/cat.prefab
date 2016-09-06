@@ -39,7 +39,6 @@ GameObject:
   - 212: {fileID: 212000011154778494}
   - 114: {fileID: 114000011899427344}
   - 58: {fileID: 58000012656110398}
-  - 50: {fileID: 50000013463984738}
   m_Layer: 0
   m_Name: cat
   m_TagString: Enemies
@@ -74,23 +73,6 @@ Transform:
   - {fileID: 4000010158603634}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!50 &50000013463984738
-Rigidbody2D:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013654755880}
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &58000012269074966
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -114,7 +96,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: -0.04, y: 0.3}
   serializedVersion: 2
