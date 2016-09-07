@@ -7,6 +7,7 @@ public class Spider : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        gameObject.name = "spider";
         transform.position = new Vector3(transform.position.x, LevelData.HightLevel, transform.position.z);
     }
 

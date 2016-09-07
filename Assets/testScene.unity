@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SegmentsOfLevel: 2
-  AmountEnemies: 2
+  AmountEnemies: 3
   SafeRadius: 6.5
   CorridorPrefab: {fileID: 4000010056473748, guid: bb9d10154290fe147b27a052216dcf9b,
     type: 2}

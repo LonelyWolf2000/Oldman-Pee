@@ -39,6 +39,7 @@ GameObject:
   - 212: {fileID: 212000011154778494}
   - 114: {fileID: 114000011899427344}
   - 58: {fileID: 58000012656110398}
+  - 50: {fileID: 50000013210451016}
   m_Layer: 0
   m_Name: cat
   m_TagString: Enemies
@@ -73,6 +74,23 @@ Transform:
   - {fileID: 4000010158603634}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!50 &50000013210451016
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013654755880}
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!58 &58000012269074966
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -113,7 +131,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 3
-  HissTime: 0
+  HissTime: 0.5
+  ThinkTime: 0.8
+  RadiusPool: 6
+  RadiusArgo: 1.25
+  DistanceFollowing: 2.5
 --- !u!114 &114000013854458310
 MonoBehaviour:
   m_ObjectHideFlags: 1

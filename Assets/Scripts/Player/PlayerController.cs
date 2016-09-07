@@ -22,8 +22,9 @@ namespace Player
             if (Player == null)
                 Player = this;
 
-            _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.1f;
+            _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = 1 - GetComponent<SpriteRenderer>().sprite.pivot.x / 100;
+
         }
 
         private void Update()
@@ -33,6 +34,8 @@ namespace Player
 
         public void Move(float direction)
         {
+            if(direction == 0) return;
+
             Vector3 newPosition = new Vector3(transform.position.x + _speed * direction, transform.position.y, transform.position.z);
             _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
 
@@ -42,7 +45,6 @@ namespace Player
                 transform.position = newPosition;
                 if (MovePlayerEvent != null) MovePlayerEvent.Invoke(gameObject);
             }
-            
         }
     }
 }
