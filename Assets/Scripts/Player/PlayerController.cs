@@ -56,7 +56,7 @@ namespace Player
         }
         private void _AddStress(string sourceOfStress)
         {
-            Stress += sourceOfStress == "Enemies" ? 0 : 2;
+            Stress += sourceOfStress == "Enemies" ? 10 : 2;
 
             if (Stress > 10 && FullStressEvent != null)
             {
