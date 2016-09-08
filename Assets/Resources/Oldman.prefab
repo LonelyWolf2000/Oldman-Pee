@@ -22,7 +22,7 @@ GameObject:
   - 212: {fileID: 212000010400892780}
   - 114: {fileID: 114000011732783080}
   - 50: {fileID: 50000012192233754}
-  - 58: {fileID: 58000013524660028}
+  - 61: {fileID: 61000010337893812}
   m_Layer: 0
   m_Name: Oldman
   m_TagString: Player
@@ -60,8 +60,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &58000013524660028
-CircleCollider2D:
+--- !u!61 &61000010337893812
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -71,9 +71,9 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0.23, y: 0.66}
+  m_Offset: {x: 0.29749703, y: 0.6079244}
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Size: {x: 0.8807838, y: 1.2265786}
 --- !u!114 &114000011732783080
 MonoBehaviour:
   m_ObjectHideFlags: 1

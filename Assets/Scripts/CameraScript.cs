@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CameraScript : MonoBehaviour
 {
@@ -19,5 +18,10 @@ public class CameraScript : MonoBehaviour
             transform.parent = sender.transform;
         else
             transform.parent = null;
+    }
+
+    private void OnDestroy()
+    {
+        Player.PlayerController.MovePlayerEvent -= OnMovePlayer;
     }
 }
