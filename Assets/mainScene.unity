@@ -426,8 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09d3c453233c27e468430ae674cb7ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SegmentsOfLevel: 1
-  AmountEnemies: 3
+  SegmentsOfLevel: 2
+  AmountEnemies: 5
   SafeRadius: 6.5
   CorridorPrefab: {fileID: 4000010056473748, guid: bb9d10154290fe147b27a052216dcf9b,
     type: 2}

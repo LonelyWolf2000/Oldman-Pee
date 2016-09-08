@@ -15,6 +15,8 @@ namespace Enemy.Cat
         public float DistanceFollowing = 2.0f;
         public float JumpForce = 5.0f;
 
+        public bool IsAgro { get; private set; }
+
         private Transform _target;
 
         void Start()
@@ -27,6 +29,7 @@ namespace Enemy.Cat
         public void FollowTarget(Transform target)
         {
             gameObject.layer = 8;   // Перемещаем кошку на 8й слой (Cats), чтоб физика столкновения кошек не просчитывалась
+            IsAgro = true;
             _target = target;
             StartCoroutine(_Follow(_target, Vector3.left));
         }

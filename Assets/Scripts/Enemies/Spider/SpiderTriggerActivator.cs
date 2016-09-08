@@ -18,7 +18,6 @@ namespace Enemy.Spider
 
         private void OnTriggerStay2D(Collider2D other)
         {
-            Debug.Log("ppp");
             if (!_parent.IsCooldown && (other.tag == "Player" || other.tag == "Enemies"))
             {
                 _parent.GetDown();

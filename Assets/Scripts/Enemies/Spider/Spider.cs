@@ -8,7 +8,7 @@ namespace Enemy.Spider
         public float MoveSpeed;
         public float Cooldown;
 
-        public bool IsCooldown;
+        public bool IsCooldown { get; private set; }
 
         // Use this for initialization
         void Start()
@@ -62,7 +62,7 @@ namespace Enemy.Spider
         }
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.name == "cat")
+            if (other.name == "cat" && other.GetComponent<Cat.Cat>().IsAgro)
             {
                 GetComponent<SpriteRenderer>().enabled = false;
                 Destroy(gameObject);
