@@ -64,15 +64,17 @@ namespace Enemy.Cat
 
         private IEnumerator _Follow(Transform point, Vector3 direction)
         {
-            while (Mathf.Abs(transform.position.x - point.position.x) > DistanceFollowing)
+            while (Mathf.Abs(transform.position.x - point.position.x) > 0)
             {
                 transform.Translate(direction * Time.deltaTime * MoveSpeed, Space.World);
                 yield return new WaitForEndOfFrame();
             }
 
             if (direction == Vector3.left)
-                StartCoroutine(_SaveDistance());
-            else
+                //StartCoroutine(_SaveDistance());
+                if (!_isHissingRun)
+                    StartCoroutine(_Hissing());
+                else
                 _Destroy();
         }
 
