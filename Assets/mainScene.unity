@@ -90,6 +90,11 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!223 &424203618 stripped
+Canvas:
+  m_PrefabParentObject: {fileID: 223000014018314678, guid: a8bbd50eb59ed1b41a041c8df439405a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1411802011}
 --- !u!1 &545421755
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +371,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 998aeffd33c9efb44a42e1dfca729a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Win: {fileID: 0}
-  Lose: {fileID: 0}
+  Win: {fileID: 424203618}
+  Lose: {fileID: 1969663689}
   Menu: {fileID: 0}
+--- !u!223 &1969663689 stripped
+Canvas:
+  m_PrefabParentObject: {fileID: 223000012660261576, guid: a8bbd50eb59ed1b41a041c8df439405a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1411802011}
