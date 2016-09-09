@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using GameController.Commands;
 
 namespace GameController
 {
@@ -9,7 +8,7 @@ namespace GameController
         public static InputController Instance { get; private set; }
 
         public delegate void ExecuteMethod();
-        public delegate ICommand Command(float axis);
+        public delegate void Command(float axis);
 
         public event Command MoveEvent;
         public event Command CryEvent;
@@ -25,15 +24,20 @@ namespace GameController
         void Update()
         {
             if (Input.GetAxis("Moving") != 0 && MoveEvent != null)
-                _executeCommand(MoveEvent.Invoke(Input.GetAxis("Moving")));
+                MoveEvent.Invoke(Input.GetAxis("Moving"));
 
             if (Input.GetAxis("Cry") != 0 && CryEvent != null)
-                _executeCommand(CryEvent.Invoke(Input.GetAxis("Cry")));
+                CryEvent.Invoke(Input.GetAxis("Cry"));
+
+            _ExecutingCommands();
         }
 
-        private void _executeCommand(ICommand command)
+        private void _ExecutingCommands()
         {
-            if (command != null) command.Execute();
+            while (CommandManager.CountCommands > 0)
+            {
+                CommandManager.ExecuteNextCommand();
+            }
         }
     }
 }

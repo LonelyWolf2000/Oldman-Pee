@@ -14,15 +14,18 @@ namespace Enemy.Cat
         public float RadiusAgro = 1.5f;
         public float DistanceFollowing = 2.0f;
         public float JumpForce = 5.0f;
-
         public bool IsAgro { get; private set; }
+        private bool _vulnerability;
 
         private Transform _target;
+        private MarkersScript _markers;
+        private bool _isHissingRun;
 
         void Start()
         {
             gameObject.name = "cat";
             InputController.Instance.CryEvent += OnCryEvent;
+            _markers = GetComponent<MarkersScript>();
         }
 
 
@@ -52,11 +55,6 @@ namespace Enemy.Cat
             StartCoroutine(_Follow(LevelData.RightLimiter, Vector3.right));
         }
 
-        private void _CryReaction()
-        {
-            Jump();
-        }
-
         private void _Destroy()
         {
             GetComponent<SpriteRenderer>().enabled = false;
@@ -73,17 +71,20 @@ namespace Enemy.Cat
             }
 
             if (direction == Vector3.left)
-                StartCoroutine(_Hissing());
+                StartCoroutine(_SaveDistance());
             else
                 _Destroy();
         }
 
-        private IEnumerator _Hissing()
+        private IEnumerator _SaveDistance()
         {
             while (true)
             {
-                yield return new WaitForSeconds(HissTime);
-                Debug.Log("Hissssss");
+                if(!_isHissingRun)
+                    StartCoroutine(_Hissing());
+
+                yield return null;
+
                 if (Mathf.Abs(transform.position.x - _target.position.x) > DistanceFollowing)
                 {
                     yield return new WaitForSeconds(ThinkTime);
@@ -93,12 +94,28 @@ namespace Enemy.Cat
             }
         }
 
-        private ICommand OnCryEvent(float axis)
+        private IEnumerator _Hissing()
         {
-            if (axis != 0 && _target != null && Mathf.Abs(transform.position.x - _target.position.x) < DistanceFollowing)
-                return new Cry(_CryReaction);
+            _isHissingRun = true;
+            yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
 
-            return null;
+            _vulnerability = true;
+            float delay = Random.Range(0.5f, 2.0f);
+            _markers.CryMarker_Enable(delay);
+
+            yield return new WaitForSeconds(delay);
+
+            _vulnerability = false;
+            _isHissingRun = false;
+        }
+
+        private void OnCryEvent(float axis)
+        {
+            if (axis != 0 && _target != null && _vulnerability)
+            {
+                CommandManager.RegisterCommand(new Cry(Jump));
+                InputController.Instance.CryEvent -= OnCryEvent;
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)

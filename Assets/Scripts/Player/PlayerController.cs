@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using GameController;
 using GameController.Commands;
+using System;
 
 namespace Player
 {
@@ -14,7 +15,9 @@ namespace Player
         public static PlayerController Player { get; private set; }
         public int Stress { get; private set; }
         public float MoveSpeed;
+        public GameObject[] Indicators;
 
+        private MarkersScript _markers;
         private const int _DIVIDER = 100;
         private float _speed;
         private float _leftOffset;
@@ -23,22 +26,31 @@ namespace Player
 
         private void Start()
         {
+            _markers = GetComponent<MarkersScript>();
+
             if (Player == null)
                 Player = this;
 
             InputController.Instance.MoveEvent += OnMoveEvent;
+            InputController.Instance.CryEvent += OnCryEvent;
 
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
 
         }
 
-        private ICommand OnMoveEvent(float direction)
+        private void OnCryEvent(float axis)
         {
-            if (direction == 0) return null;
-            _currentDirection = direction;
+            CommandManager.RegisterCommand(new Cry(_GoAwayCry));
+        }
 
-            return new Move(_Move);
+
+        private void OnMoveEvent(float direction)
+        {
+            if (direction == 0) return;
+
+            _currentDirection = direction;
+            CommandManager.RegisterCommand(new Move(_Move));
         }
 
         private void _Move()
@@ -54,11 +66,16 @@ namespace Player
                 if (MovePlayerEvent != null) MovePlayerEvent.Invoke(gameObject);
             }
         }
+        private void _GoAwayCry()
+        {
+            _markers.GoAwayMarker_Show();
+        }
         private void _AddStress(string sourceOfStress)
         {
-            Stress += sourceOfStress == "Enemies" ? 0 : 2;
+            Stress += sourceOfStress == "Enemies" ? 10 : 2;
+            _markers.WarningMarker_Show();
 
-            if (Stress > 10 && FullStressEvent != null)
+            if (Stress > 20 && FullStressEvent != null)
             {
                 InputController.Instance.MoveEvent -= OnMoveEvent;
                 FullStressEvent.Invoke();
@@ -70,6 +87,11 @@ namespace Player
             {
                 _AddStress(other.tag);
             }
+        }
+
+        private void OnDestroy()
+        {
+            InputController.Instance.CryEvent -= OnCryEvent;
         }
     }
 }
