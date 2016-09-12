@@ -30,11 +30,13 @@ namespace GameController
 
         private void OnFullStressEvent()
         {
+            Debug.Log("lose");
             GetComponent<GUIMessages>().Lose.enabled = true;
         }
 
         private void PlayerWin(GameObject door)
         {
+            Debug.Log("lose");
             GetComponent<GUIMessages>().Win.enabled = true;
         }  
 
