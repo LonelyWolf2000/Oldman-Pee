@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using GameController;
 using GameController.Commands;
-using System;
 
 namespace Player
 {
@@ -15,6 +14,7 @@ namespace Player
         public static PlayerController Player { get; private set; }
         public int Stress { get; private set; }
         public float MoveSpeed;
+        public float BrakingMoment;
         public GameObject[] Indicators;
 
         private MarkersScript _markers;
@@ -26,6 +26,7 @@ namespace Player
 
         private void Start()
         {
+            gameObject.name = "Oldman";
             _markers = GetComponent<MarkersScript>();
 
             if (Player == null)
@@ -36,7 +37,6 @@ namespace Player
 
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
-
         }
 
         private void OnCryEvent(float axis)
@@ -70,7 +70,7 @@ namespace Player
         {
             _markers.GoAwayMarker_Show();
         }
-        private void _AddStress(string sourceOfStress)
+        public void AddStress(string sourceOfStress)
         {
             Stress += sourceOfStress == "Enemies" ? 10 : 2;
             _markers.WarningMarker_Show();
@@ -81,13 +81,13 @@ namespace Player
                 FullStressEvent.Invoke();
             }
         }
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.tag == "Enemies")
-            {
-                _AddStress(other.tag);
-            }
-        }
+        //private void OnTriggerEnter2D(Collider2D other)
+        //{
+        //    if (other.tag == "Enemies" && gameObject.name == "Oldman")
+        //    {
+        //        _AddStress(other.tag);
+        //    }
+        //}
 
         private void OnDestroy()
         {

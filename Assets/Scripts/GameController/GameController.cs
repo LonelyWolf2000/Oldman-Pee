@@ -13,7 +13,7 @@ namespace GameController
         public GameObject Player; // Префаб игрока
         public GameObject[] Enemies;
 
-        private const float _MININTERVAL = 0.5f; // Минимальный интервал между спунищимися противниками
+        private const float _MININTERVAL = 1.0f; // Минимальный интервал между спунищимися противниками
 
         private void Awake()
         {

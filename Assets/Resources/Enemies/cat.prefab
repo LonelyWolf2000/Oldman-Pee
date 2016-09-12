@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010738575914}
   - 212: {fileID: 212000010541022558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cry_marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,6 @@ GameObject:
   - 212: {fileID: 212000011154778494}
   - 58: {fileID: 58000012656110398}
   - 50: {fileID: 50000013210451016}
-  - 61: {fileID: 61000010044237582}
   m_Layer: 8
   m_Name: cat
   m_TagString: Enemies
@@ -147,24 +146,10 @@ CircleCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_Offset: {x: -0.04, y: 0.3}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!61 &61000010044237582
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013654755880}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0.33416668}
-  serializedVersion: 2
-  m_Size: {x: 0.87166667, y: 0.66833335}
 --- !u!114 &114000011899427344
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using GameController.Commands;
 using GameController;
+using Random = UnityEngine.Random;
 
 namespace Enemy.Cat
 {
@@ -16,6 +18,7 @@ namespace Enemy.Cat
         public float JumpForce = 5.0f;
         public bool IsAgro { get; private set; }
         private bool _vulnerability;
+
 
         private Transform _target;
         private MarkersScript _markers;
@@ -34,48 +37,82 @@ namespace Enemy.Cat
             gameObject.layer = 8;   // Перемещаем кошку на 8й слой (Cats), чтоб физика столкновения кошек не просчитывалась
             IsAgro = true;
             _target = target;
-            StartCoroutine(_Follow(_target, Vector3.left));
+            StartCoroutine(_MoveToTarget());
         }
 
         public void Jump()
         {
             StopAllCoroutines();
 
-            GetComponent<BoxCollider2D>().isTrigger = false;
+            GetComponent<CircleCollider2D>().isTrigger = false;
             GetComponent<Rigidbody2D>().gravityScale = 3;
             GetComponent<Rigidbody2D>().velocity = new Vector2(0, JumpForce);
 
             _RunAway();
+        }
+
+        private void _Startle()
+        {
+            StopAllCoroutines();
+            _vulnerability = false;
+            MoveSpeed += 2;
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+            StartCoroutine(_MoveToPoint(new Vector3(transform.position.x + 6.5f, transform.position.y, transform.position.z)));
         }
         private void _RunAway()
         {
             MoveSpeed += 2;
             transform.rotation = new Quaternion(0, 180, 0, 0);
             DistanceFollowing = 0.5f;
-            StartCoroutine(_Follow(LevelData.RightLimiter, Vector3.right));
+            IsAgro = false;
+            _target = LevelData.RightLimiter;
+            StartCoroutine(_MoveToTarget());
         }
 
         private void _Destroy()
         {
-            GetComponent<SpriteRenderer>().enabled = false;
             InputController.Instance.CryEvent -= OnCryEvent;
+            StopAllCoroutines();
+            GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
         }
 
-        private IEnumerator _Follow(Transform point, Vector3 direction)
+        private IEnumerator _MoveToTarget()
         {
-            while (Mathf.Abs(transform.position.x - point.position.x) > 0)
+            while (true)
             {
+                if (_DistanceToTarget() < DistanceFollowing + 0.1f && _DistanceToTarget() > DistanceFollowing - 0.1f)
+                    break;
+
+                Vector3 direction = transform.position.x - _target.transform.position.x > DistanceFollowing ? Vector3.left : Vector3.right;
                 transform.Translate(direction * Time.deltaTime * MoveSpeed, Space.World);
+
                 yield return new WaitForEndOfFrame();
             }
 
-            if (direction == Vector3.left)
-                //StartCoroutine(_SaveDistance());
-                if (!_isHissingRun)
-                    StartCoroutine(_Hissing());
-                else
-                _Destroy();
+            if (IsAgro)
+                StartCoroutine(_SaveDistance());
+        }
+
+        private IEnumerator _MoveToPoint(Vector3 point)
+        {
+            while (true)
+            {
+                if (Math.Abs(transform.position.x - point.x) < 0.1f)
+                    break;
+
+                transform.Translate(Vector3.right * Time.deltaTime * MoveSpeed, Space.World);
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            MoveSpeed -= 2;
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+            _isHissingRun = false;
+
+            yield return new WaitForSeconds(2.0f);
+
+            StartCoroutine(_MoveToTarget());
         }
 
         private IEnumerator _SaveDistance()
@@ -87,10 +124,10 @@ namespace Enemy.Cat
 
                 yield return null;
 
-                if (Mathf.Abs(transform.position.x - _target.position.x) > DistanceFollowing)
+                if (Mathf.Abs(_DistanceToTarget() - DistanceFollowing) > 0)
                 {
                     yield return new WaitForSeconds(ThinkTime);
-                    FollowTarget(_target);
+                    StartCoroutine(_MoveToTarget());
                     break;
                 }
             }
@@ -111,21 +148,26 @@ namespace Enemy.Cat
             _isHissingRun = false;
         }
 
+        private float _DistanceToTarget()
+        {
+            return Mathf.Abs(transform.position.x - _target.position.x);
+        }
+
         private void OnCryEvent(float axis)
         {
             if (axis != 0 && _target != null && _vulnerability)
             {
-                CommandManager.RegisterCommand(new Cry(Jump));
-                InputController.Instance.CryEvent -= OnCryEvent;
+               CommandManager.RegisterCommand(new Cry(_Startle));
             }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_target != null && other.name == "spider")
-            {
+            if (_target != null && other.name == "EndDoor")
+                _Destroy();
+
+            if (_target != null && (other.name == "spider" || other.name == "cat"))
                 Jump();
-            }
         }
     }
 }
