@@ -5,9 +5,6 @@ namespace Enemy.Cat
 {
     public class MarkersScript : MonoBehaviour
     {
-        //public delegate void MarkerEnabled(Transform sender);
-        //public event MarkerEnabled MarkerEnabledEvent;
-
         public float DefaultDelayHideMarker = 0.8f;
         public Transform[] Markers;
 
@@ -40,9 +37,6 @@ namespace Enemy.Cat
 
             float delay = customDelay > 0 ? customDelay : DefaultDelayHideMarker;
             Markers[index].GetComponent<SpriteRenderer>().enabled = true;
-
-            //if (MarkerEnabledEvent != null)
-            //    MarkerEnabledEvent.Invoke(Markers[index]);
 
             StartCoroutine(_HideMarker(Markers[index], delay));
         }

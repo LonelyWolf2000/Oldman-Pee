@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using Player;
+﻿using Enemy.Spider;
+using UnityEngine;
 
 namespace Player
 {
@@ -18,7 +17,7 @@ namespace Player
         {
             if (other.name == "spider")
             {
-                Player.AddStress(10);
+                Player.AddStress(other.GetComponent<Spider>().StressValue);
             }
         }
     }

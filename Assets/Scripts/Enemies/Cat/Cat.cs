@@ -49,12 +49,15 @@ namespace Enemy.Cat
             GetComponent<CircleCollider2D>().isTrigger = false;
             GetComponent<Rigidbody2D>().gravityScale = 3;
             GetComponent<Rigidbody2D>().velocity = new Vector2(0, JumpForce);
+            GetComponent<CircleCollider2D>().isTrigger = true;
+            GetComponent<Rigidbody2D>().gravityScale = 0;
 
             _RunAway();
         }
 
         private void _Startle()
         {
+            //Jump();
             StopAllCoroutines();
             _currentMarker = "none";
             MoveSpeed += 2;
@@ -153,10 +156,7 @@ namespace Enemy.Cat
             yield return new WaitForSeconds(delay);
 
             if (_currentMarker == "AtackMarker")
-            {
-                Debug.Log(_target);
                 _target.GetComponent<Player.PlayerController>().AddStress(StressValue);
-            }
 
             _currentMarker = "none";
             _isHissingRun = false;
@@ -188,8 +188,8 @@ namespace Enemy.Cat
             if (_target != null && other.name == "EndDoor")
                 _Destroy();
 
-            if (_target != null && (other.name == "spider" || other.name == "cat"))
-                Jump();
+            //if (_target != null && (other.name == "spider" || other.name == "cat"))
+            //    Jump();
         }
     }
 }

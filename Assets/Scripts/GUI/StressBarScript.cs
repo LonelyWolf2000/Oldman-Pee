@@ -16,7 +16,11 @@ public class StressBarScript : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        Debug.Log(_player.Stress);
-        Fill.fillAmount = _player.Stress / 100;
+        _StressBar();
+    }
+
+    private void _StressBar()
+    {
+        Fill.fillAmount = (float)_player.Stress / 100;
     }
 }

@@ -7,6 +7,7 @@ namespace Enemy.Spider
     {
         public float MoveSpeed;
         public float Cooldown;
+        public int StressValue;
 
         public bool IsCooldown { get; private set; }
 
@@ -15,6 +16,7 @@ namespace Enemy.Spider
         {
             gameObject.name = "spider";
             transform.position = new Vector3(transform.position.x, LevelData.HightLevel, transform.position.z);
+            StartCoroutine(_RandomMove());
         }
 
         public void GetDown()
@@ -23,6 +25,20 @@ namespace Enemy.Spider
 
             IsCooldown = true;
             StartCoroutine(_VerticalMoving());
+        }
+
+        private IEnumerator _RandomMove()
+        {
+            while (true)
+            {
+                yield return null;
+
+                if (!IsCooldown)
+                {
+                    yield return new WaitForSeconds(Random.Range(2.0f, 5.0f));
+                    GetDown();
+                }
+            }
         }
 
         private IEnumerator _VerticalMoving()
@@ -60,13 +76,14 @@ namespace Enemy.Spider
             yield return new WaitForSeconds(Cooldown);
             IsCooldown = false;
         }
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.name == "cat" && other.GetComponent<Cat.Cat>().IsAgro)
-            {
-                GetComponent<SpriteRenderer>().enabled = false;
-                Destroy(gameObject);
-            }
-        }
+
+        //private void OnTriggerEnter2D(Collider2D other)
+        //{
+        //    if (other.name == "cat" && other.GetComponent<Cat.Cat>().IsAgro)
+        //    {
+        //        GetComponent<SpriteRenderer>().enabled = false;
+        //        Destroy(gameObject);
+        //    }
+        //}
     }
 }
