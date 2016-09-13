@@ -90,12 +90,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!223 &291054964 stripped
-Canvas:
-  m_PrefabParentObject: {fileID: 223000013920590730, guid: 7c739a43be194cd48b34483afdc8a7d4,
-    type: 2}
-  m_PrefabInternal: {fileID: 313083214}
---- !u!1001 &313083214
+--- !u!1001 &203043097
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -137,11 +132,16 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7c739a43be194cd48b34483afdc8a7d4, type: 2}
   m_IsPrefabParent: 0
+--- !u!223 &291054964 stripped
+Canvas:
+  m_PrefabParentObject: {fileID: 223000013920590730, guid: 7c739a43be194cd48b34483afdc8a7d4,
+    type: 2}
+  m_PrefabInternal: {fileID: 203043097}
 --- !u!223 &519585065 stripped
 Canvas:
   m_PrefabParentObject: {fileID: 223000010441469274, guid: 7c739a43be194cd48b34483afdc8a7d4,
     type: 2}
-  m_PrefabInternal: {fileID: 313083214}
+  m_PrefabInternal: {fileID: 203043097}
 --- !u!1 &545421755
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ namespace Player
 
         public static PlayerController Player { get; private set; }
         public int Stress { get; private set; }
+        public int MaxStress = 100;
         public float MoveSpeed;
         public float BrakingMoment;
         public GameObject[] Indicators;
@@ -43,8 +44,7 @@ namespace Player
         {
             CommandManager.RegisterCommand(new Cry(_GoAwayCry));
         }
-
-
+        
         private void OnMoveEvent(float direction)
         {
             if (direction == 0) return;
@@ -70,25 +70,17 @@ namespace Player
         {
             _markers.GoAwayMarker_Show();
         }
-        public void AddStress(string sourceOfStress)
+        public void AddStress(int stress)
         {
-            Stress += sourceOfStress == "Enemies" ? 10 : 2;
+            Stress += stress;
             _markers.WarningMarker_Show();
 
-            if (Stress > 20 && FullStressEvent != null)
+            if (Stress > MaxStress && FullStressEvent != null)
             {
                 InputController.Instance.MoveEvent -= OnMoveEvent;
                 FullStressEvent.Invoke();
             }
         }
-        //private void OnTriggerEnter2D(Collider2D other)
-        //{
-        //    if (other.tag == "Enemies" && gameObject.name == "Oldman")
-        //    {
-        //        _AddStress(other.tag);
-        //    }
-        //}
-
         private void OnDestroy()
         {
             InputController.Instance.CryEvent -= OnCryEvent;

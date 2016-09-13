@@ -6,19 +6,19 @@ namespace Player
 {
     public class StressTrigger : MonoBehaviour
     {
-        private PlayerController _player;
+        public PlayerController Player { get; private set; }
 
         // Use this for initialization
         void Start()
         {
-            _player = GetComponentInParent<PlayerController>();
+            Player = GetComponentInParent<PlayerController>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.tag == "Enemies")
+            if (other.name == "spider")
             {
-                _player.AddStress(other.tag);
+                Player.AddStress(10);
             }
         }
     }

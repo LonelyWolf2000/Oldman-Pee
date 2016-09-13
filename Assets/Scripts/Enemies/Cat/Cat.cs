@@ -10,6 +10,7 @@ namespace Enemy.Cat
     public class Cat : MonoBehaviour
     {
         public float MoveSpeed = 3.0f;
+        public int StressValue;
         public float HissTime = 0.5f;
         public float ThinkTime = 1.0f;
         public float RadiusPool = 6.0f;
@@ -18,7 +19,7 @@ namespace Enemy.Cat
         public float JumpForce = 5.0f;
         public bool IsAgro { get; private set; }
         private bool _vulnerability;
-
+        private string _currentMarker = "none";
 
         private Transform _target;
         private MarkersScript _markers;
@@ -28,6 +29,7 @@ namespace Enemy.Cat
         {
             gameObject.name = "cat";
             InputController.Instance.CryEvent += OnCryEvent;
+            InputController.Instance.BlockEvent += OnBlockEvent;
             _markers = GetComponent<MarkersScript>();
         }
 
@@ -54,10 +56,16 @@ namespace Enemy.Cat
         private void _Startle()
         {
             StopAllCoroutines();
-            _vulnerability = false;
+            _currentMarker = "none";
             MoveSpeed += 2;
             transform.rotation = new Quaternion(0, 180, 0, 0);
             StartCoroutine(_MoveToPoint(new Vector3(transform.position.x + 6.5f, transform.position.y, transform.position.z)));
+        }
+
+        private void _Block()
+        {
+            if(_currentMarker == "AtackMarker")
+                _currentMarker = "none";
         }
         private void _RunAway()
         {
@@ -72,6 +80,7 @@ namespace Enemy.Cat
         private void _Destroy()
         {
             InputController.Instance.CryEvent -= OnCryEvent;
+            InputController.Instance.BlockEvent -= OnBlockEvent;
             StopAllCoroutines();
             GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
@@ -138,13 +147,18 @@ namespace Enemy.Cat
             _isHissingRun = true;
             yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
 
-            _vulnerability = true;
             float delay = Random.Range(0.5f, 2.0f);
-            _markers.CryMarker_Enable(delay);
+            _currentMarker = _markers.EnableRandomMarker(delay);
 
             yield return new WaitForSeconds(delay);
 
-            _vulnerability = false;
+            if (_currentMarker == "AtackMarker")
+            {
+                Debug.Log(_target);
+                _target.GetComponent<Player.PlayerController>().AddStress(StressValue);
+            }
+
+            _currentMarker = "none";
             _isHissingRun = false;
         }
 
@@ -155,9 +169,17 @@ namespace Enemy.Cat
 
         private void OnCryEvent(float axis)
         {
-            if (axis != 0 && _target != null && _vulnerability)
+            if (axis != 0 && _target != null && _currentMarker == "CryMarker")
             {
                CommandManager.RegisterCommand(new Cry(_Startle));
+            }
+        }
+
+        private void OnBlockEvent(float axis)
+        {
+            if (axis != 0 && _target != null && _currentMarker == "AtackMarker")
+            {
+                CommandManager.RegisterCommand(new Block(_Block));
             }
         }
 

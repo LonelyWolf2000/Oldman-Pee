@@ -12,6 +12,7 @@ namespace GameController
 
         public event Command MoveEvent;
         public event Command CryEvent;
+        public event Command BlockEvent;
 
         // Use this for initialization
         void Awake()
@@ -28,6 +29,9 @@ namespace GameController
 
             if (Input.GetAxis("Cry") != 0 && CryEvent != null)
                 CryEvent.Invoke(Input.GetAxis("Cry"));
+
+            if (Input.GetAxis("Block") != 0 && BlockEvent != null)
+                BlockEvent.Invoke(Input.GetAxis("Block"));
 
             _ExecutingCommands();
         }

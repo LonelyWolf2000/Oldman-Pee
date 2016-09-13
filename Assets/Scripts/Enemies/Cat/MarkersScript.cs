@@ -5,20 +5,46 @@ namespace Enemy.Cat
 {
     public class MarkersScript : MonoBehaviour
     {
+        //public delegate void MarkerEnabled(Transform sender);
+        //public event MarkerEnabled MarkerEnabledEvent;
+
         public float DefaultDelayHideMarker = 0.8f;
         public Transform[] Markers;
 
+
+        public string EnableRandomMarker()
+        {
+            return EnableRandomMarker(DefaultDelayHideMarker);
+        }
+        public string EnableRandomMarker(float customDelay)
+        {
+            if (Markers == null) return null;
+
+            int index = Random.Range(0, Markers.Length);
+            _EnableMarkerByIndex(index, customDelay);
+
+            return Markers[index].name;
+        }
         public void CryMarker_Enable()
         {
             CryMarker_Enable(DefaultDelayHideMarker);
         }
         public void CryMarker_Enable(float customDelay)
         {
-            if (!_CheckValidAccess(0)) return;
+            _EnableMarkerByIndex(0, customDelay);
+        }
+
+        private void _EnableMarkerByIndex(int index, float customDelay)
+        {
+            if (!_CheckValidAccess(index)) return;
 
             float delay = customDelay > 0 ? customDelay : DefaultDelayHideMarker;
-            Markers[0].GetComponent<SpriteRenderer>().enabled = true;
-            StartCoroutine(_HideMarker(Markers[0], delay));
+            Markers[index].GetComponent<SpriteRenderer>().enabled = true;
+
+            //if (MarkerEnabledEvent != null)
+            //    MarkerEnabledEvent.Invoke(Markers[index]);
+
+            StartCoroutine(_HideMarker(Markers[index], delay));
         }
 
         private IEnumerator _HideMarker(Transform spriteRenderer, float delay)
