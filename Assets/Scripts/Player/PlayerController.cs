@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets.Scripts.GameController;
 using UnityEngine;
 using GameController;
 using GameController.Commands;
@@ -18,9 +19,11 @@ namespace Player
         public float MoveSpeed;
         public float BrakingMoment;
         public GameObject[] Indicators;
+        //public CommonComponents CommonComponents;
 
         private MarkersScript _markers;
         private AudioSource _walkSound;
+        private SoundSystemEventListener _soundSystemEventListener;
         private const int _DIVIDER = 100;
         private float _speed;
         private float _leftOffset;
@@ -42,6 +45,7 @@ namespace Player
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
 
             _walkSound = GetComponent<AudioSource>();
+            _soundSystemEventListener = new SoundSystemEventListener(_walkSound, FindObjectOfType<SettingSysScript>());
             StartCoroutine(_EnableWalkSound());
         }
 
@@ -58,7 +62,6 @@ namespace Player
             if(_currentDirection != 0)
                 CommandManager.RegisterCommand(new Move(_Move));
         }
-
         private void _Move()
         {
             Vector3 newPosition = new Vector3(transform.position.x + _speed * _currentDirection, transform.position.y, transform.position.z);
@@ -107,6 +110,8 @@ namespace Player
         private void OnDestroy()
         {
             InputController.Instance.CryEvent -= OnCryEvent;
+            InputController.Instance.MoveEvent -= OnMoveEvent;
+            _soundSystemEventListener.DestroyListener();
         }
     }
 }

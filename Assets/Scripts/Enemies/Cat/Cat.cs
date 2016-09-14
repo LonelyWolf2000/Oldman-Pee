@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using Assets.Scripts.GameController;
 using GameController.Commands;
 using GameController;
 using Random = UnityEngine.Random;
@@ -20,7 +21,9 @@ namespace Enemy.Cat
         public bool IsAgro { get; private set; }
         private bool _vulnerability;
         private string _currentMarker = "none";
+        //public CommonComponents CommonComponents;
 
+        private SoundSystemEventListener _soundSystemEventListener;
         private AudioSource _crySound;
         private Transform _target;
         private MarkersScript _markers;
@@ -33,6 +36,7 @@ namespace Enemy.Cat
             InputController.Instance.BlockEvent += OnBlockEvent;
             _markers = GetComponent<MarkersScript>();
             _crySound = GetComponent<AudioSource>();
+            _soundSystemEventListener = new SoundSystemEventListener(_crySound, FindObjectOfType<SettingSysScript>());
         }
 
 
@@ -93,6 +97,7 @@ namespace Enemy.Cat
         {
             InputController.Instance.CryEvent -= OnCryEvent;
             InputController.Instance.BlockEvent -= OnBlockEvent;
+            _soundSystemEventListener.DestroyListener();
             StopAllCoroutines();
             GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);

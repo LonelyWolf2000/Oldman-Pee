@@ -274,6 +274,8 @@ MonoBehaviour:
   RadiusAgro: 0.5
   DistanceFollowing: 2.5
   JumpForce: 7
+  SettingSystem: {fileID: 114000013036792484, guid: 17a539afac2eb2c4fba35d739c4e7bbe,
+    type: 2}
 --- !u!114 &114000013854458310
 MonoBehaviour:
   m_ObjectHideFlags: 1

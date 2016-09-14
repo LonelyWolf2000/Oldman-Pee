@@ -193,6 +193,7 @@ MonoBehaviour:
   AudioClips:
   - {fileID: 8300000, guid: 84b2aa1d67f210c4793faf70243e3025, type: 3}
   - {fileID: 8300000, guid: a97312eaf4b4cd347960f09d0083a0d0, type: 3}
+  CommonComponents: {fileID: 0}
 --- !u!114 &114000011574065350
 MonoBehaviour:
   m_ObjectHideFlags: 1

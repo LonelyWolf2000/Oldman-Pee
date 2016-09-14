@@ -326,6 +326,8 @@ MonoBehaviour:
   MoveSpeed: 4
   BrakingMoment: 3
   Indicators: []
+  SettingSystem: {fileID: 114000013036792484, guid: 17a539afac2eb2c4fba35d739c4e7bbe,
+    type: 2}
 --- !u!114 &114000011997147716
 MonoBehaviour:
   m_ObjectHideFlags: 1

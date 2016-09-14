@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.GameController;
 
 namespace Enemy.Spider
 {
@@ -10,7 +11,9 @@ namespace Enemy.Spider
         public int StressValue;
         public AudioClip[] AudioClips;
         private AudioSource _spiderSound;
+        //public CommonComponents CommonComponents;
 
+        private SoundSystemEventListener _soundSystemEventListener;
         public bool IsCooldown { get; private set; }
 
         // Use this for initialization
@@ -19,6 +22,7 @@ namespace Enemy.Spider
             gameObject.name = "spider";
             transform.position = new Vector3(transform.position.x, LevelData.HightLevel, transform.position.z);
             _spiderSound = GetComponent<AudioSource>();
+            _soundSystemEventListener = new SoundSystemEventListener(_spiderSound, FindObjectOfType<SettingSysScript>());
             StartCoroutine(_RandomMove());
         }
 
@@ -92,6 +96,11 @@ namespace Enemy.Spider
 
             _spiderSound.clip = AudioClips[index];
             _spiderSound.Play();
+        }
+
+        private void OnDestroy()
+        {
+            _soundSystemEventListener.DestroyListener();
         }
 
         //private void OnTriggerEnter2D(Collider2D other)
