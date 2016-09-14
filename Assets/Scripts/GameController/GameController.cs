@@ -11,8 +11,8 @@ namespace GameController
         public Transform CorridorPrefab; // Префаб коридора
         public Transform DoorPrefab; // Префаб двери
         public GameObject Player; // Префаб игрока
+        public float CatsStepOffsetY = 0.1f;
         public GameObject[] Enemies;
-
         private const float _MININTERVAL = 1.0f; // Минимальный интервал между спунищимися противниками
 
         private void Awake()
@@ -99,12 +99,21 @@ namespace GameController
 
             GameObject containerEnemy = new GameObject("Enemies");
             float[] spawnedEnemies = new float[AmountEnemies];
+            float catsOffsetY = 0;
 
             for (int i = 0; i < AmountEnemies; i++)
             {
+                float y = 0;
                 GameObject enemy = Instantiate(Enemies[Random.Range(0, Enemies.Length)]);
-                enemy.transform.position = _GenerateUnicCoord(spawnedEnemies, i);
+
+                if (enemy.name == "cat(Clone)")
+                {
+                    catsOffsetY += CatsStepOffsetY;
+                    y = catsOffsetY;
+                }
+                enemy.transform.position = _GenerateUnicCoord(spawnedEnemies, y, i);
                 enemy.transform.parent = containerEnemy.transform;
+
             }
         }
 
@@ -114,7 +123,7 @@ namespace GameController
         /// <param name="spawnedEnemies"></param>
         /// <param name="currentIndex"></param>
         /// <returns></returns>
-        private Vector3 _GenerateUnicCoord(float[] spawnedEnemies, int currentIndex)
+        private Vector3 _GenerateUnicCoord(float[] spawnedEnemies, float y, int currentIndex)
         {
             float x = -1;
             while (x < 0)
@@ -132,7 +141,7 @@ namespace GameController
 
             spawnedEnemies[currentIndex] = x;
 
-            return new Vector3(x, 0);
+            return new Vector3(x, y);
         }
 
         private void OnDestroy()

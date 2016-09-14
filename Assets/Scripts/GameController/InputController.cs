@@ -24,7 +24,10 @@ namespace GameController
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetAxis("Moving") != 0 && MoveEvent != null)
+            //if (Input.GetAxis("Moving") != 0 && MoveEvent != null)
+            //    MoveEvent.Invoke(Input.GetAxis("Moving"));
+
+            if (MoveEvent != null)
                 MoveEvent.Invoke(Input.GetAxis("Moving"));
 
             if (Input.GetAxis("Cry") != 0 && CryEvent != null)

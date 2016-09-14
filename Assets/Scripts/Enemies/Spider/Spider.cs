@@ -8,6 +8,8 @@ namespace Enemy.Spider
         public float MoveSpeed;
         public float Cooldown;
         public int StressValue;
+        public AudioClip[] AudioClips;
+        private AudioSource _spiderSound;
 
         public bool IsCooldown { get; private set; }
 
@@ -16,6 +18,7 @@ namespace Enemy.Spider
         {
             gameObject.name = "spider";
             transform.position = new Vector3(transform.position.x, LevelData.HightLevel, transform.position.z);
+            _spiderSound = GetComponent<AudioSource>();
             StartCoroutine(_RandomMove());
         }
 
@@ -46,6 +49,7 @@ namespace Enemy.Spider
             float t = 0;
             Vector3 startPos = transform.position;
             Vector3 endPos = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            _PlaySpiderSound(0);
 
             bool exit = false;
             while (true)
@@ -65,16 +69,29 @@ namespace Enemy.Spider
                     endPos = startPos;
                     startPos = transform.position;
                     exit = true;
+                    _PlaySpiderSound(1);
                 }
 
                 yield return null;
             }
+
+            if(_spiderSound)
+                _spiderSound.Stop();
         }
 
         private IEnumerator _CooldownTimer()
         {
             yield return new WaitForSeconds(Cooldown);
             IsCooldown = false;
+        }
+
+        private void _PlaySpiderSound(int index)
+        {
+            if(_spiderSound == null || AudioClips == null || AudioClips.Length == 0)
+                return;
+
+            _spiderSound.clip = AudioClips[index];
+            _spiderSound.Play();
         }
 
         //private void OnTriggerEnter2D(Collider2D other)

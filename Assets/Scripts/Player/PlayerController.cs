@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using GameController;
 using GameController.Commands;
 
@@ -19,6 +20,7 @@ namespace Player
         public GameObject[] Indicators;
 
         private MarkersScript _markers;
+        private AudioSource _walkSound;
         private const int _DIVIDER = 100;
         private float _speed;
         private float _leftOffset;
@@ -38,6 +40,9 @@ namespace Player
 
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
+
+            _walkSound = GetComponent<AudioSource>();
+            StartCoroutine(_EnableWalkSound());
         }
 
         private void OnCryEvent(float axis)
@@ -47,17 +52,18 @@ namespace Player
         
         private void OnMoveEvent(float direction)
         {
-            if (direction == 0) return;
+            //if (direction == 0) return;
 
             _currentDirection = direction;
-            CommandManager.RegisterCommand(new Move(_Move));
+            if(_currentDirection != 0)
+                CommandManager.RegisterCommand(new Move(_Move));
         }
 
         private void _Move()
         {
             Vector3 newPosition = new Vector3(transform.position.x + _speed * _currentDirection, transform.position.y, transform.position.z);
             _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
-            _currentDirection = 0;
+            //_currentDirection = 0;
 
             if (newPosition.x > LevelData.LeftLimiter.position.x + _leftOffset
                 && newPosition.x < LevelData.RightLimiter.position.x - _rightOffset)
@@ -79,6 +85,23 @@ namespace Player
             {
                 InputController.Instance.MoveEvent -= OnMoveEvent;
                 FullStressEvent.Invoke();
+            }
+        }
+
+        private IEnumerator _EnableWalkSound()
+        {
+            if(_walkSound == null) yield break;
+
+            
+            _walkSound.Play();
+            _walkSound.Pause();
+
+            while (true)
+            {
+                if (_currentDirection != 0) _walkSound.UnPause();
+                else _walkSound.Pause();
+
+                yield return new WaitForSeconds(0.1f);
             }
         }
         private void OnDestroy()

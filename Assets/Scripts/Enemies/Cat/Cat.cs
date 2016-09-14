@@ -21,6 +21,7 @@ namespace Enemy.Cat
         private bool _vulnerability;
         private string _currentMarker = "none";
 
+        private AudioSource _crySound;
         private Transform _target;
         private MarkersScript _markers;
         private bool _isHissingRun;
@@ -31,6 +32,7 @@ namespace Enemy.Cat
             InputController.Instance.CryEvent += OnCryEvent;
             InputController.Instance.BlockEvent += OnBlockEvent;
             _markers = GetComponent<MarkersScript>();
+            _crySound = GetComponent<AudioSource>();
         }
 
 
@@ -59,6 +61,7 @@ namespace Enemy.Cat
         {
             //Jump();
             StopAllCoroutines();
+            _PlaySound();
             _currentMarker = "none";
             MoveSpeed += 2;
             transform.rotation = new Quaternion(0, 180, 0, 0);
@@ -78,6 +81,12 @@ namespace Enemy.Cat
             IsAgro = false;
             _target = LevelData.RightLimiter;
             StartCoroutine(_MoveToTarget());
+        }
+
+        private void _PlaySound()
+        {
+            if (_crySound != null)
+                _crySound.Play();
         }
 
         private void _Destroy()
@@ -156,7 +165,10 @@ namespace Enemy.Cat
             yield return new WaitForSeconds(delay);
 
             if (_currentMarker == "AtackMarker")
+            {
                 _target.GetComponent<Player.PlayerController>().AddStress(StressValue);
+                _PlaySound();
+            }
 
             _currentMarker = "none";
             _isHissingRun = false;
