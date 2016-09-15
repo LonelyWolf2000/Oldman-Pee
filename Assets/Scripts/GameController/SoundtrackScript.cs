@@ -7,7 +7,7 @@ public class SoundtrackScript : MonoBehaviour
     private AudioSource _audioSource;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         _audioSource = GetComponent<AudioSource>();
         _settingSys = FindObjectOfType<SettingSysScript>();
