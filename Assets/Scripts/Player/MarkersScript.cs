@@ -6,28 +6,50 @@ namespace Player
     public class MarkersScript : MonoBehaviour
     {
         public float DelayHideMarker = 0.8f;
-        public Transform[] Markers;
+        public SpriteRenderer[] Markers;
+
+        private SpriteRenderer _lastMarker;
 
         public void GoAwayMarker_Show()
         {
             if (!_CheckValidAccess(0)) return;
 
-            Markers[0].GetComponent<SpriteRenderer>().enabled = true;
-            StartCoroutine(_HideMarker(Markers[0], DelayHideMarker));
+            _HideLastMarker();
+            Markers[0].enabled = true;
+            _lastMarker = Markers[0];
+            StartCoroutine(_HideMarker(_lastMarker, DelayHideMarker));
+        }
+
+        public void BlockMarker_Show()
+        {
+            if (!_CheckValidAccess(2)) return;
+
+            _HideLastMarker();
+            Markers[2].enabled = true;
+            _lastMarker = Markers[2];
+            StartCoroutine(_HideMarker(_lastMarker, DelayHideMarker));
         }
 
         public void WarningMarker_Show()
         {
             if (!_CheckValidAccess(1)) return;
 
-            Markers[1].GetComponent<SpriteRenderer>().enabled = true;
-            StartCoroutine(_HideMarker(Markers[1], DelayHideMarker));
+            _HideLastMarker();
+            Markers[1].enabled = true;
+            _lastMarker = Markers[1];
+            StartCoroutine(_HideMarker(_lastMarker, DelayHideMarker));
         }
 
-        private IEnumerator _HideMarker(Transform spriteRenderer, float delay)
+        private void _HideLastMarker()
+        {
+            if(_lastMarker &&_lastMarker.enabled)
+                _lastMarker.enabled = false;
+        }
+
+        private IEnumerator _HideMarker(SpriteRenderer marker, float delay)
         {
             yield return new WaitForSeconds(delay);
-            spriteRenderer.GetComponent<SpriteRenderer>().enabled = false;
+            marker.enabled = false;
         }
 
         private bool _CheckValidAccess(int index)

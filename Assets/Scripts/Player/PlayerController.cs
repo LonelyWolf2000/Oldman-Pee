@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Assets.Scripts.GameController;
 using UnityEngine;
 using GameController;
 using GameController.Commands;
@@ -40,6 +39,7 @@ namespace Player
 
             InputController.Instance.MoveEvent += OnMoveEvent;
             InputController.Instance.CryEvent += OnCryEvent;
+            InputController.Instance.BlockEvent += OnBlockEvent;
 
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
@@ -53,7 +53,11 @@ namespace Player
         {
             CommandManager.RegisterCommand(new Cry(_GoAwayCry));
         }
-        
+        private void OnBlockEvent(float axis)
+        {
+            CommandManager.RegisterCommand(new Cry(_Block));
+        }
+
         private void OnMoveEvent(float direction)
         {
             //if (direction == 0) return;
@@ -66,7 +70,6 @@ namespace Player
         {
             Vector3 newPosition = new Vector3(transform.position.x + _speed * _currentDirection, transform.position.y, transform.position.z);
             _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
-            //_currentDirection = 0;
 
             if (newPosition.x > LevelData.LeftLimiter.position.x + _leftOffset
                 && newPosition.x < LevelData.RightLimiter.position.x - _rightOffset)
@@ -79,12 +82,16 @@ namespace Player
         {
             _markers.GoAwayMarker_Show();
         }
+        private void _Block()
+        {
+            _markers.BlockMarker_Show();
+        }
         public void AddStress(int stress)
         {
             Stress += stress;
             _markers.WarningMarker_Show();
 
-            if (Stress > MaxStress && FullStressEvent != null)
+            if (Stress >= MaxStress && FullStressEvent != null)
             {
                 InputController.Instance.MoveEvent -= OnMoveEvent;
                 FullStressEvent.Invoke();
@@ -107,9 +114,16 @@ namespace Player
                 yield return new WaitForSeconds(0.1f);
             }
         }
+
+        //private void OnTriggerEnter2D(Collider2D other)
+        //{
+        //    if(other.name == "EndDoor")
+        //        InputController.Instance.MoveEvent -= OnMoveEvent;
+        //}
         private void OnDestroy()
         {
             InputController.Instance.CryEvent -= OnCryEvent;
+            InputController.Instance.BlockEvent -= OnBlockEvent;
             InputController.Instance.MoveEvent -= OnMoveEvent;
             _soundSystemEventListener.DestroyListener();
         }

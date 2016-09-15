@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.GameController;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {

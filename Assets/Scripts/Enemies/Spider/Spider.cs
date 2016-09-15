@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Assets.Scripts.GameController;
 
 namespace Enemy.Spider
 {

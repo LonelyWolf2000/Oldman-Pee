@@ -5,18 +5,24 @@ namespace GameController
 {
     public class GameController : MonoBehaviour
     {
-        public int SegmentsOfLevel = 1; // Количество сегментов (экранов) левела
-        public int AmountEnemies = 2; // Количество врагов на левеле
-        public float SafeRadius = 6.5f; // Минимальное удаление от точки старта плеера для спауна противника
-        public Transform CorridorPrefab; // Префаб коридора
-        public Transform DoorPrefab; // Префаб двери
-        public GameObject Player; // Префаб игрока
+        public int SegmentsOfLevel = 1;     // Количество сегментов (экранов) левела
+        public int AmountEnemies = 2;       // Количество врагов на левеле
+        public float SafeRadius = 6.5f;     // Минимальное удаление от точки старта плеера для спауна противника
+        public Transform CorridorPrefab;    // Префаб коридора
+        public Transform DoorPrefab;        // Префаб двери
+        public Transform Background;    
+        public GameObject Player;           // Префаб игрока
         public float CatsStepOffsetY = 0.1f;
         public GameObject[] Enemies;
         private const float _MININTERVAL = 1.0f; // Минимальный интервал между спунищимися противниками
+        private SoundSystemEventListener _soundSystemEventListener;
+        private AudioSource _audioSource;
 
         private void Awake()
         {
+            _audioSource = GetComponent<AudioSource>();
+            _soundSystemEventListener = new SoundSystemEventListener(_audioSource, FindObjectOfType<SettingSysScript>());
+
             if (Enemies.Length == 0)
                 Enemies = Resources.LoadAll<GameObject>("Enemies");
 
@@ -30,12 +36,18 @@ namespace GameController
 
         private void OnFullStressEvent()
         {
-            GetComponent<GUIMessages>().Lose.enabled = true;
+            GUIMessages guiMessages = GetComponent<GUIMessages>();
+            guiMessages.Lose.enabled = true;
+            _PlaySound(guiMessages.LoseSound);
+            OnDestroy();
         }
 
         private void PlayerWin(GameObject door)
         {
-            GetComponent<GUIMessages>().Win.enabled = true;
+            GUIMessages guiMessages = GetComponent<GUIMessages>();
+            guiMessages.Win.enabled = true;
+            _PlaySound(guiMessages.WinSound);
+            OnDestroy();
         }  
 
         /// <summary>
@@ -74,6 +86,7 @@ namespace GameController
 
             _InstDoor("StartDoor", levelContainer, LevelData.LeftLimiter);
             _InstDoor("EndDoor", levelContainer, LevelData.RightLimiter);
+            _InstBackground(LevelData.RightLimiter, levelContainer);
         }
 
         /// <summary>
@@ -88,6 +101,24 @@ namespace GameController
             door.name = name;
             door.parent = levelContainer.transform;
             door.transform.position = doorPosition.transform.position;
+        }
+
+        private void _InstBackground(Transform endPosition, GameObject levelContainer)
+        {
+            if(!Background) return;
+
+            Sprite sprite = Background.GetComponent<SpriteRenderer>().sprite;
+            float offsetBackgraund = sprite.rect.width / sprite.pixelsPerUnit + 1.5f;
+            float positionX = 3;
+
+            while (positionX < endPosition.position.x)
+            {
+                Transform back = Instantiate(Background);
+                back.name = "bakcground";
+                back.parent = levelContainer.transform;
+                back.transform.position = new Vector3(positionX, back.transform.position.y, back.transform.position.z);
+                positionX += offsetBackgraund;
+            }
         }
 
         /// <summary>
@@ -144,10 +175,20 @@ namespace GameController
             return new Vector3(x, y);
         }
 
+        private void _PlaySound(AudioClip audioClip)
+        {
+            if (_audioSource != null)
+            {
+                _audioSource.clip = audioClip;
+                _audioSource.Play();
+            }
+        }
+
         private void OnDestroy()
         {
             DoorScript.PlayerInDoorEvent -= PlayerWin;
             PlayerController.FullStressEvent -= OnFullStressEvent;
+            _soundSystemEventListener.DestroyListener();
         }
     }
 }

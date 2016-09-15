@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1000012243581742}
   m_IsPrefabParent: 1
+--- !u!1 &1000010071518506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010069160186}
+  - 212: {fileID: 212000012842809054}
+  m_Layer: 0
+  m_Name: goaway_cry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1000010669085270
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,12 +108,25 @@ GameObject:
   - 4: {fileID: 4000012117976068}
   - 212: {fileID: 212000011308454836}
   m_Layer: 0
-  m_Name: goaway_cry
+  m_Name: block_marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4000010069160186
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010071518506}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.632, y: 1.453, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000012764804862}
+  m_RootOrder: 1
 --- !u!4 &4000012085132726
 Transform:
   m_ObjectHideFlags: 1
@@ -118,12 +147,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000014181120150}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.632, y: 1.453, z: 0}
+  m_LocalPosition: {x: 0.415, y: 1.592, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000012764804862}
-  m_RootOrder: 1
+  m_RootOrder: 4
 --- !u!4 &4000012404302054
 Transform:
   m_ObjectHideFlags: 1
@@ -149,9 +178,10 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000012404302054}
-  - {fileID: 4000012117976068}
+  - {fileID: 4000010069160186}
   - {fileID: 4000012899614894}
   - {fileID: 4000012085132726}
+  - {fileID: 4000012117976068}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &4000012899614894
@@ -326,8 +356,6 @@ MonoBehaviour:
   MoveSpeed: 4
   BrakingMoment: 3
   Indicators: []
-  SettingSystem: {fileID: 114000013036792484, guid: 17a539afac2eb2c4fba35d739c4e7bbe,
-    type: 2}
 --- !u!114 &114000011997147716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,8 +369,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DelayHideMarker: 0.8
   Markers:
-  - {fileID: 4000012117976068}
-  - {fileID: 4000012404302054}
+  - {fileID: 212000012842809054}
+  - {fileID: 212000011439620438}
+  - {fileID: 212000011308454836}
 --- !u!114 &114000012278517846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -416,7 +445,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c10b5b08cb3a77f438f70734f18380e0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ed5d1c10b134e9e47a4308c2c1b94f2e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -450,6 +479,39 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c39764675fc349a4393fb14b3588a664, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+--- !u!212 &212000012842809054
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010071518506}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 1
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: c10b5b08cb3a77f438f70734f18380e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

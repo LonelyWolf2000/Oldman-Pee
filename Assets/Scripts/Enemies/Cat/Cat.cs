@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
-using Assets.Scripts.GameController;
 using GameController.Commands;
 using GameController;
 using Random = UnityEngine.Random;
@@ -74,8 +73,11 @@ namespace Enemy.Cat
 
         private void _Block()
         {
-            if(_currentMarker == "AtackMarker")
-                _currentMarker = "none";
+            if (_currentMarker == "AtackMarker")
+            {
+                _markers.AfraidMarker_Enable();
+                _Startle();
+            }
         }
         private void _RunAway()
         {
@@ -165,7 +167,7 @@ namespace Enemy.Cat
             yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
 
             float delay = Random.Range(0.5f, 2.0f);
-            _currentMarker = _markers.EnableRandomMarker(delay);
+            _currentMarker = _markers.EnableRandomMarker(0, 1, delay);
 
             yield return new WaitForSeconds(delay);
 

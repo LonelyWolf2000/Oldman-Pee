@@ -30,10 +30,10 @@ namespace GameController
             if (MoveEvent != null)
                 MoveEvent.Invoke(Input.GetAxis("Moving"));
 
-            if (Input.GetAxis("Cry") != 0 && CryEvent != null)
+            if (Input.GetKeyDown(KeyCode.Space) && CryEvent != null)
                 CryEvent.Invoke(Input.GetAxis("Cry"));
 
-            if (Input.GetAxis("Block") != 0 && BlockEvent != null)
+            if ((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && BlockEvent != null)
                 BlockEvent.Invoke(Input.GetAxis("Block"));
 
             _ExecutingCommands();
