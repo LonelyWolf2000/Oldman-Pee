@@ -144,15 +144,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SegmentsOfLevel: 2
-  AmountEnemies: 5
-  SafeRadius: 6.5
+  StressOfLevel: 1
+  AmountEnemies: 2
+  SafeRadius: 6.7
   CorridorPrefab: {fileID: 4000010056473748, guid: bb9d10154290fe147b27a052216dcf9b,
     type: 2}
   DoorPrefab: {fileID: 4000012818354744, guid: 06919a53f4bc1af438be18d959039b64, type: 2}
   Background: {fileID: 4000011995998564, guid: 921ddb60070d565479e0e3b4629dee5b, type: 2}
   Player: {fileID: 1000012243581742, guid: 641079b6d51f2c641aa8c639891f5f9c, type: 2}
-  CatsStepOffsetY: 0.05
+  CatsStepOffsetY: 0.01
   Enemies: []
+  MinCats: 4
+  MaxCats: 6
+  MinSpiders: 4
+  MaxSpiders: 7
 --- !u!114 &114000013974453578
 MonoBehaviour:
   m_ObjectHideFlags: 1

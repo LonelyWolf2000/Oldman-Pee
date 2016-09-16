@@ -166,7 +166,7 @@ namespace Enemy.Cat
             _isHissingRun = true;
             yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
 
-            float delay = Random.Range(0.5f, 2.0f);
+            float delay = Random.Range(0.5f, 1.0f);
             _currentMarker = _markers.EnableRandomMarker(0, 1, delay);
 
             yield return new WaitForSeconds(delay);

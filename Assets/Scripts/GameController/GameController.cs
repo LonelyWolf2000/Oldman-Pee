@@ -1,11 +1,14 @@
-﻿using Player;
+﻿using System.Collections;
+using Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameController
 {
     public class GameController : MonoBehaviour
     {
         public int SegmentsOfLevel = 1;     // Количество сегментов (экранов) левела
+        public int StressOfLevel;
         public int AmountEnemies = 2;       // Количество врагов на левеле
         public float SafeRadius = 6.5f;     // Минимальное удаление от точки старта плеера для спауна противника
         public Transform CorridorPrefab;    // Префаб коридора
@@ -14,7 +17,11 @@ namespace GameController
         public GameObject Player;           // Префаб игрока
         public float CatsStepOffsetY = 0.1f;
         public GameObject[] Enemies;
-        private const float _MININTERVAL = 1.0f; // Минимальный интервал между спунищимися противниками
+        public int MinCats;
+        public int MaxCats;
+        public int MinSpiders;
+        public int MaxSpiders;
+        private const float _MININTERVAL = 0.2f; // Минимальный интервал между спаунищимися противниками
         private SoundSystemEventListener _soundSystemEventListener;
         private AudioSource _audioSource;
 
@@ -27,7 +34,7 @@ namespace GameController
                 Enemies = Resources.LoadAll<GameObject>("Enemies");
 
             _GenerateLevel();
-            _SpawnEnemies();
+            SpawnEnemies();
             Instantiate(Player);
 
             DoorScript.PlayerInDoorEvent += PlayerWin;
@@ -83,6 +90,7 @@ namespace GameController
             //Устанавливаем правый край сцены
             LevelData.RightLimiter = prevSegment.GetComponent<CorridorScript>().RightPoint;
             LevelData.HightLevel = prevSegment.FindChild("ceiling").position.y;
+            LevelData.StressOfLevel = StressOfLevel;
 
             _InstDoor("StartDoor", levelContainer, LevelData.LeftLimiter);
             _InstDoor("EndDoor", levelContainer, LevelData.RightLimiter);
@@ -121,30 +129,50 @@ namespace GameController
             }
         }
 
+        public void SpawnEnemies()
+        {
+            if (Enemies == null || Enemies.Length == 0) return;
+
+            GameObject containerAllEnemy = new GameObject("Enemies");
+
+            if (MaxCats != 0)
+                _SpawnSpecificEnemies(Enemies[0], Random.Range(MinCats, MaxCats + 1), containerAllEnemy.transform);
+            if (MaxSpiders != 0)
+                _SpawnSpecificEnemies(Enemies[1], Random.Range(MinSpiders, MaxSpiders + 1), containerAllEnemy.transform);
+        }
+
         /// <summary>
         /// Спауним количество AmountEnemies противников, рандомного типа в рандомной точке.
         /// </summary>
-        private void _SpawnEnemies()
+        private void _SpawnRandomEnemies()
         {
-            if (AmountEnemies == 0 || Enemies == null || Enemies.Length == 0) return;
+            MaxCats = MinCats = AmountEnemies - Random.Range(1, AmountEnemies + 1);
+            MaxSpiders = MinSpiders = AmountEnemies - MaxCats;
+            SpawnEnemies();
+        }
 
-            GameObject containerEnemy = new GameObject("Enemies");
-            float[] spawnedEnemies = new float[AmountEnemies];
+        private void _SpawnSpecificEnemies(GameObject enemy, int amount, Transform containerAllEnemy)
+        {
+            if (enemy == null || amount == 0) return;
+
+            GameObject containerSpecificEnemy = new GameObject(enemy.name);
+            containerSpecificEnemy.transform.parent = containerAllEnemy;
+
+            float[] spawnedEnemies = new float[amount];
             float catsOffsetY = 0;
 
-            for (int i = 0; i < AmountEnemies; i++)
+            for (int i = 0; i < amount; i++)
             {
                 float y = 0;
-                GameObject enemy = Instantiate(Enemies[Random.Range(0, Enemies.Length)]);
+                GameObject newEnemy = Instantiate(enemy);
 
-                if (enemy.name == "cat(Clone)")
+                if (newEnemy.name == "cat(Clone)")
                 {
                     catsOffsetY += CatsStepOffsetY;
                     y = catsOffsetY;
                 }
-                enemy.transform.position = _GenerateUnicCoord(spawnedEnemies, y, i);
-                enemy.transform.parent = containerEnemy.transform;
-
+                newEnemy.transform.position = _GenerateUnicCoord(spawnedEnemies, y, i);
+                newEnemy.transform.parent = containerSpecificEnemy.transform;
             }
         }
 

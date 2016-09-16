@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GameController;
 using GameController.Commands;
@@ -17,12 +18,12 @@ namespace Player
         public int MaxStress = 100;
         public float MoveSpeed;
         public float BrakingMoment;
-        public GameObject[] Indicators;
+        public AudioSource[] AudioSources;
         //public CommonComponents CommonComponents;
 
         private MarkersScript _markers;
         private AudioSource _walkSound;
-        private SoundSystemEventListener _soundSystemEventListener;
+        private List<SoundSystemEventListener> _soundSystemEventListeners;
         private const int _DIVIDER = 100;
         private float _speed;
         private float _leftOffset;
@@ -44,9 +45,17 @@ namespace Player
             _leftOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 - 0.5f;
             _rightOffset = GetComponent<SpriteRenderer>().sprite.pivot.x / 100 + 0.4f;
 
-            _walkSound = GetComponent<AudioSource>();
-            _soundSystemEventListener = new SoundSystemEventListener(_walkSound, FindObjectOfType<SettingSysScript>());
-            StartCoroutine(_EnableWalkSound());
+            if (AudioSources != null)
+            {
+                _soundSystemEventListeners = new List<SoundSystemEventListener>();
+
+                _walkSound = AudioSources[0];
+                _soundSystemEventListeners.Add(new SoundSystemEventListener(_walkSound, FindObjectOfType<SettingSysScript>()));
+                _soundSystemEventListeners.Add(new SoundSystemEventListener(AudioSources[1], FindObjectOfType<SettingSysScript>()));
+                StartCoroutine(_EnableWalkSound());
+            }
+
+            StartCoroutine("_StressTick");
         }
 
         private void OnCryEvent(float axis)
@@ -60,8 +69,6 @@ namespace Player
 
         private void OnMoveEvent(float direction)
         {
-            //if (direction == 0) return;
-
             _currentDirection = direction;
             if(_currentDirection != 0)
                 CommandManager.RegisterCommand(new Move(_Move));
@@ -89,12 +96,28 @@ namespace Player
         public void AddStress(int stress)
         {
             Stress += stress;
-            _markers.WarningMarker_Show();
+
+            if (stress > 5)
+            {
+                _markers.WarningMarker_Show();
+                AudioSources[1].Play();
+            }
 
             if (Stress >= MaxStress && FullStressEvent != null)
             {
                 InputController.Instance.MoveEvent -= OnMoveEvent;
+                StopAllCoroutines();
+                _walkSound.Pause();
                 FullStressEvent.Invoke();
+            }
+        }
+
+        private IEnumerator _StressTick()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1.0f);
+                AddStress(LevelData.StressOfLevel);
             }
         }
 
@@ -125,7 +148,9 @@ namespace Player
             InputController.Instance.CryEvent -= OnCryEvent;
             InputController.Instance.BlockEvent -= OnBlockEvent;
             InputController.Instance.MoveEvent -= OnMoveEvent;
-            _soundSystemEventListener.DestroyListener();
+
+            foreach (var _soundSystemEventListener in _soundSystemEventListeners)
+                _soundSystemEventListener.DestroyListener();
         }
     }
 }
