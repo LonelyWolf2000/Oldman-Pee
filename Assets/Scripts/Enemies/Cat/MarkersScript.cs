@@ -61,7 +61,6 @@ namespace Enemy.Cat
             yield return new WaitForSeconds(delay);
             marker.enabled = false;
         }
-
         private bool _CheckValidAccess(int index)
         {
             return Markers != null && index > -1 && index < Markers.Length;

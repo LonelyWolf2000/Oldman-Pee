@@ -75,7 +75,7 @@ namespace Enemy.Cat
         {
             if (_currentMarker == "AtackMarker")
             {
-                _markers.AfraidMarker_Enable();
+                //_markers.AfraidMarker_Enable();
                 _Startle();
             }
         }
