@@ -19,27 +19,37 @@ namespace GameController
         {
             if (Instance == null)
                 Instance = this;
+
+#if UNITY_ANDROID
+            GameObject mobileInputPanel = (GameObject) Resources.Load("GUI/MobileInputPanel");
+            GameObject mobUI = Instantiate(mobileInputPanel);
+            mobUI.GetComponent<MobileInput>().InputController = Instance;
+            mobUI.transform.SetParent(GameObject.Find("GUI").transform);
+#else
+            gameObject.AddComponent<ClassicInput>().InputController = Instance;
+#endif
+
         }
 
-        // Update is called once per frame
-        void Update()
+        public void InvokeMoveEvent(float axis)
         {
-            //if (Input.GetAxis("Moving") != 0 && MoveEvent != null)
-            //    MoveEvent.Invoke(Input.GetAxis("Moving"));
-
-            if (MoveEvent != null)
-                MoveEvent.Invoke(Input.GetAxis("Moving"));
-
-            if (Input.GetKeyDown(KeyCode.Space) && CryEvent != null)
-                CryEvent.Invoke(Input.GetAxis("Cry"));
-
-            if ((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && BlockEvent != null)
-                BlockEvent.Invoke(Input.GetAxis("Block"));
-
-            _ExecutingCommands();
+            if(MoveEvent != null)
+                MoveEvent.Invoke(axis);
         }
 
-        private void _ExecutingCommands()
+        public void InvokeCryEvent(float axis)
+        {
+            if (CryEvent != null)
+                CryEvent.Invoke(axis);
+        }
+
+        public void InvokeBlockEvent(float axis)
+        {
+            if (BlockEvent != null)
+                BlockEvent.Invoke(axis);
+        }
+
+        public void ExecutingCommands()
         {
             while (CommandManager.CountCommands > 0)
             {

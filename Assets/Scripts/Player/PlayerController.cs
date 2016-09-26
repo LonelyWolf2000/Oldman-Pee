@@ -77,10 +77,11 @@ namespace Player
         {
             Vector3 newPosition = new Vector3(transform.position.x + _speed * _currentDirection, transform.position.y, transform.position.z);
             _speed = MoveSpeed > 0 ? MoveSpeed / _DIVIDER : 0.1f;
-
+            
             if (newPosition.x > LevelData.LeftLimiter.position.x + _leftOffset
                 && newPosition.x < LevelData.RightLimiter.position.x - _rightOffset)
             {
+                Debug.Log(_currentDirection);
                 transform.position = newPosition;
                 if (MovePlayerEvent != null) MovePlayerEvent.Invoke(gameObject);
             }
